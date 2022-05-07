@@ -1,3 +1,12 @@
+export { default as Feature } from './Feature.js';
+export { default as Loading } from './Loading.js';
+export { default as Preview} from './Preview.js';
+export { default as Search } from './Search.js';
+export { default as Title } from './Title.js';
+
+// export or import>?>????
+
+
 /**
  * The index.js file is used to re-export from our separate files, that way rather than write:
  * 
@@ -11,3 +20,4 @@
  * 
  * Re-export Feature, Loading, Preview, Search, and Title from their respective files
  */
+
