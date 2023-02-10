@@ -10,28 +10,20 @@ export const KEY = 'apikey=07769720-0406-43e9-bc2a-6332aed4e2fd';
  * This will make a call to the API for a single term and value (e.g. "person", and "unknown"), and return the result
  */
 export async function fetchQueryResultsFromTermAndValue(term, value) {
-  try {
-    const response = await fetch(`${ BASE_URL }/object?${ KEY }&${ term }=${ encodeURI(value.split('-').join('|')) }`);
-    const data = await response.json();
+  const response = await fetch(`${BASE_URL}/object?${KEY}&${term}=${encodeURI(value.split('-').join('|'))}`);
+  const data = await response.json();
 
-    return data;
-  } catch (error) {
-    throw error;
-  }
+  return data;
 }
 
 /**
  * This will make a call to the API for a preformed url (useful for previous and next buttons), and return the result
  */
 export async function fetchQueryResultsFromURL(url) {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+  const response = await fetch(url);
+  const data = await response.json();
 
-    return data;
-  } catch (error) {
-    throw error;
-  }
+  return data;
 }
 
 /**
@@ -44,8 +36,7 @@ export async function fetchQueryResults({
   classification,
   queryString,
 }) {
-  const url = `${ BASE_URL }/object?${ KEY }&classification=${ classification }&century=${ 
-    century }&keyword=${ queryString }`;
+  const url = `${BASE_URL}/object?${KEY}&classification=${classification}&century=${century}&keyword=${queryString}`;
 
   try {
     const response = await fetch(url);
@@ -65,19 +56,14 @@ export async function fetchAllCenturies() {
     return JSON.parse(localStorage.getItem('centuries'));
   }
 
-  const url = `${ BASE_URL }/century?${ KEY }&size=100&sort=temporalorder`;
+  const url = `${BASE_URL}/century?${KEY}&size=100&sort=temporalorder`;
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    const records = data.records;
+  const response = await fetch(url);
+  const { records } = await response.json();
 
-    localStorage.setItem('centuries', JSON.stringify(records));
+  localStorage.setItem('centuries', JSON.stringify(records));
 
-    return records;
-  } catch (error) {
-    throw error;
-  }
+  return records;
 }
 
 /**
@@ -88,17 +74,12 @@ export async function fetchAllClassifications() {
     return JSON.parse(localStorage.getItem('classifications'));
   }
 
-  const url = `${ BASE_URL }/classification?${ KEY }&size=100&sort=name`;
+  const url = `${BASE_URL}/classification?${KEY}&size=100&sort=name`;
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    const records = data.records;
+  const response = await fetch(url);
+  const { records } = await response.json();
 
-    localStorage.setItem('classifications', JSON.stringify(records));
+  localStorage.setItem('classifications', JSON.stringify(records));
 
-    return records;
-  } catch (error) {
-    throw error;
-  }
+  return records;
 }
