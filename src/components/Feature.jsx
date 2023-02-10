@@ -29,13 +29,13 @@ import { fetchQueryResultsFromTermAndValue } from "../api";
  * finally:
  *  - call setIsLoading, set it to false
  */
-const Searchable = (props) => {};
+
 
 /**
  * We need a new component called Feature which looks like this when no featuredResult is passed in as a prop:
- *
- * <main id="feature"></main>
- *
+ * 
+ * 
+ * 
  * And like this when one is:
  *
  * <main id="feature">
@@ -65,6 +65,86 @@ const Searchable = (props) => {};
  *
  * This component should be exported as default.
  */
-const Feature = (props) => {};
+const Feature = ({featuredResult, setIsLoading, setSearchResults}) => { 
+
+  const Searchable = ({searchTerm, searchValue}) => {
+  
+    return (
+     <span className="content">
+        <a href='#' onClick={async (event) => {
+            event.preventDefault();
+             setIsLoading(true);
+            try {
+                await fetchQueryResultsFromTermAndValue(searchTerm, searchValue).then ((result) => {setSearchResults(result);})
+                
+            } catch (error) {
+                console.error(error.message)
+            } finally {
+                 setIsLoading(false);
+            }
+        }}>{searchValue}</a>
+     </span>
+    )
+}
+
+
+  const CheckIfProperty = ({property, search}) => {
+   let newProperty = property.toLowerCase();
+   //console.log(newProperty)
+   //console.log(featuredResult[newProperty])
+    if (featuredResult[newProperty]) {
+      return(
+      <>
+        <span className="title">{property}:</span> {
+          (featuredResult[newProperty] && search) ? 
+         <Searchable searchTerm={newProperty} searchValue={featuredResult[newProperty]}/> : <span className="content">{featuredResult[newProperty]}</span>
+        }
+      </>)
+   } else {
+    return ""
+   }
+  }
+
+
+if (featuredResult) {
+ return (
+ <main id="feature">
+   <div className="object-feature">
+     <header>
+       <h3>{featuredResult.title}</h3>
+       <h4>{featuredResult.dated}</h4>
+     </header>
+     <section className="facts">
+      <CheckIfProperty property="Century"/>
+      <CheckIfProperty property="Period"/>
+      <CheckIfProperty property="Classification"/>
+      <CheckIfProperty property="Description"/>
+      <CheckIfProperty property="Department"/>
+      <CheckIfProperty property="Division"/>
+      <CheckIfProperty property="Culture" search="true"/>
+       {
+          featuredResult.people ? 
+            <>
+                <span className="title">People:</span> {
+                    featuredResult.people.map((person, index) => {return <Searchable key={index} searchTerm="person" searchValue={person.name} />})
+                }
+            </> : ""
+       }
+       <CheckIfProperty property="Dimensions"/>
+       <CheckIfProperty property="Technique" search="true"/>
+       <CheckIfProperty property="Medium" search="true"/>
+       
+     </section>
+     <section className="photos"> {
+       featuredResult.images ? 
+         featuredResult.images.map((image, index) => { return <img key={index} src={image.baseimageurl} alt={image.alttext}/>})
+        : ""}
+     </section>
+   </div>
+ </main>)
+ } else {
+ return (<main id="feature"></main>)
+ }
+}
 
 export default Feature;

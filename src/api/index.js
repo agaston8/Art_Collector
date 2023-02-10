@@ -4,7 +4,7 @@
  * You need to replace YOUR_API_KEY in the string associated with KEY with your actual API key
  */
 export const BASE_URL = 'https://api.harvardartmuseums.org';
-export const KEY = 'apikey=YOUR_API_KEY';
+export const KEY = 'apikey=07769720-0406-43e9-bc2a-6332aed4e2fd';
 
 /**
  * This will make a call to the API for a single term and value (e.g. "person", and "unknown"), and return the result
@@ -38,10 +38,14 @@ export async function fetchQueryResults({
 }) {
   const url = `${BASE_URL}/object?${KEY}&classification=${classification}&century=${century}&keyword=${queryString}`;
 
-  const response = await fetch(url);
-  const data = await response.json();
-
-  return data;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    //console.log(data)
+    return data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 /**
